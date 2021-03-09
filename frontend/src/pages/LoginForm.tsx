@@ -34,12 +34,10 @@ const LoginForm = () => {
             withCredentials: true
         }).then(res => {
             setApiError(false);
-            console.log(res.data);
             toggleLoggedIn();
             history.push("/");
         }).catch(e => {
             setApiError(true);
-            console.log(e);
         });
     };
 

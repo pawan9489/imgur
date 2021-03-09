@@ -34,6 +34,9 @@ const serdeUser = (passport: PassportStatic, LocalStrategy: any) => {
             if (err) throw err;
             const userInfo = {
                 userName: user.userName,
+                fullName: user.fullName,
+                email: user.email,
+                mobile: user.mobile,
                 isAdmin: user.isAdmin,
             };
             cb(err, userInfo);

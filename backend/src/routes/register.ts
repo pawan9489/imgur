@@ -7,11 +7,14 @@ const userRegisterRouter = express.Router();
 interface UserDocument {
     userName: string,
     password: string,
+    email: string,
+    mobile: Number,
+    fullName: string,
     isAdmin: boolean
 }
 
 userRegisterRouter.post('/', async (req: Request, res: Response) => {
-    const {userName, password} = req?.body;
+    const {userName, password, email, mobile, fullName} = req?.body;
     if (!userName || !password 
         || typeof userName !== 'string' || typeof password !== 'string' ) {
         res.status(404).send("Invalid data");
@@ -24,7 +27,10 @@ userRegisterRouter.post('/', async (req: Request, res: Response) => {
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = new User({
                 userName: userName,
-                password: hashedPassword
+                password: hashedPassword,
+                email: email, 
+                mobile: mobile, 
+                fullName: fullName
             });
             const user = await newUser.save();
             res.send(user);

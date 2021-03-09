@@ -1,12 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
+import Alert from '@material-ui/lab/Alert';
 
 type Inputs = {
     userName: string,
@@ -19,10 +21,33 @@ type Inputs = {
 
 const RegisterForm = () => {
     const { register, handleSubmit, watch, errors } = useForm<Inputs>();
+    const [apiError, setApiError] = useState(false);
+    const [apiSuccess, setApiSuccess] = useState(false);
+    const [apiErrorMessage, setApiErrorMessage] = useState('');
+    const history = useHistory();
     const password = useRef({});
     password.current = watch("password", "");
     const onSubmit = (data: Inputs) => {
         console.log(data);
+        axios.post('http://localhost:5000/register', {
+            userName: data.userName,
+            password: data.password,
+            fullName: data.fullName,
+            email: data.emailAddress,
+            mobile: data.mobile,
+        }, {
+            withCredentials: true
+        }).then(res => {
+            setApiSuccess(true);
+            setApiError(false);
+            setTimeout(() => {
+                history.push("/login");
+            }, 2000);
+        }).catch(e => {
+            setApiSuccess(false);
+            setApiErrorMessage(e);
+            setApiError(true);
+        });
     };
     return (
         <Container component="main" maxWidth="xs">
@@ -45,6 +70,12 @@ const RegisterForm = () => {
                         marginTop: '10px',
                     }}
                 >
+                    {
+                        apiError ? <Alert severity="error">{apiErrorMessage}</Alert> : null
+                    }
+                    {
+                        apiSuccess ? <Alert severity="success">User registration succeded</Alert> : null
+                    }
                     <TextField
                         margin="normal"
                         required
