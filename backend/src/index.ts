@@ -10,6 +10,7 @@ import userRouter from './routes/users';
 import userRegisterRouter from './routes/register';
 import uploadRouter from './routes/uploads';
 import serdeUser from "./services/passportStrategy";
+import bodyParser from 'body-parser';
 
 mongoose.connect("mongodb://mongo:27017/imgur", {
     useCreateIndex: true,
@@ -19,7 +20,11 @@ mongoose.connect("mongodb://mongo:27017/imgur", {
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(bodyParser.json()); // support json encoded bodies
+// app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(cors({
+    credentials: true
+}));
 
 // Session & Cookies
 app.use(session({
@@ -29,23 +34,30 @@ app.use(session({
 }));
 app.use(cookieParser());
 // Passport for Serde
+const LocalStrategy = passportLocal.Strategy;
 app.use(passport.initialize());
 app.use(passport.session());
-const LocalStrategy = passportLocal.Strategy;
 serdeUser(passport, LocalStrategy);
+
+// Login & Get Session User
+app.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
+    res.send("Successfully authenticated");
+});
+
+app.get("/user", (req, res) => {
+    res.send(req.user);
+});
+
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.send("Success")
+});
 
 // Routes
 app.use('/users', userRouter);
 app.use('/register', userRegisterRouter);
 app.use('/upload', uploadRouter);
 
-app.post('/login', passport.authenticate("local", (req: Request, res: Response) => {
-    res.send("Successfully authenticated");
-}));
-
-app.get("/user", (req, res) => {
-    res.send(req.user);
-});
-
+// App start
 const port = process.env.APP_PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
