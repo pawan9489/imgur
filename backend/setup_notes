@@ -1,10 +1,10 @@
 yarn add bcryptjs cookie-parser cors dotenv express express-session mongoose passport passport-local
 // For File Uploads
-yarn add multer multer-gridfs-storage crypto
+yarn add multer multer-gridfs-storage gridfs-stream
 // Dev Deps
 yarn add @types/bcryptjs @types/cookie-parser @types/cors @types/dotenv @types/express @types/express-session @types/mongoose passport @types/passport-local -D
 yarn add nodemon ts-node typescript -D
-yarn add @types/multer @types/multer-gridfs-storage -D
+yarn add @types/multer @types/multer-gridfs-storage @types/gridfs-stream -D
 npx tsc --init
 
 // Start

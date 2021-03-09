@@ -4,6 +4,13 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import LoginStatusStore from "../store/loginStatus";
+import UploadForm from "./UploadForm";
+
+const Header = (isLoggedIn: boolean, fullName: string) => <>
+    {
+        isLoggedIn ? <p>Hi {fullName} Welcome to Imgur</p> : <p>Welcome to Imgur, Please login to view and comment on posts</p>
+    }
+</>;
 
 const Home = () => {
     const [isLoggedIn, fullName] = LoginStatusStore(state => [state.isLoggedIn, state.fullName]);
@@ -19,10 +26,9 @@ const Home = () => {
                 }}
             >
                 <Typography component="h1" variant="h5">
-                    {
-                        isLoggedIn ? <p>Hi {fullName} Welcome to Imgur</p> : <p>Welcome to Imgur, Please login to view and comment on posts</p>
-                    }
+                    { Header(isLoggedIn, fullName) }
                 </Typography>
+                <UploadForm />
             </Box>
         </Container>
     );

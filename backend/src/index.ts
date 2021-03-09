@@ -11,10 +11,12 @@ import userRegisterRouter from './routes/register';
 import uploadRouter from './routes/uploads';
 import serdeUser from "./services/passportStrategy";
 import gridFsSetup from "./services/gridFsSetup";
+import Grid from 'gridfs-stream';
 
 // MongoDB
 const db = 'imgur';
 const url = `mongodb://mongo:27017/${db}`;
+let gfs: any;
 const connection = mongoose.connect(url, {
     useCreateIndex: true,
     useNewUrlParser: true,
@@ -22,7 +24,7 @@ const connection = mongoose.connect(url, {
 }).then(() => console.log(`Connected to Mongo DB`)).catch((e: Error) => console.error(e.message));
 
 // GridFS
-const [gfs, upload] = gridFsSetup(connection, url);
+const upload = gridFsSetup(url);
 
 const app = express();
 app.use(express.json());
@@ -61,7 +63,12 @@ app.get("/logout", (req, res) => {
 // Routes
 app.use('/users', userRouter);
 app.use('/register', userRegisterRouter);
-app.use('/upload', uploadRouter(gfs!, upload!));
+connection.then(() => {
+    // init stream
+    const gfs = Grid(mongoose.connection.db, mongoose.mongo);
+    gfs.collection('imageUpload');
+    app.use('/upload', uploadRouter(gfs, upload!));
+});
 
 // App start
 const port = process.env.APP_PORT || 5000;

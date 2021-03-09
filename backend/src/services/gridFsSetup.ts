@@ -4,16 +4,7 @@ import crypto from 'crypto';
 import path from 'path';
 import GridFsStorage from 'multer-gridfs-storage';
 
-const gridFsSetup = (connection: any, url: string) => {
-    // init gfs
-    let gfs;
-    connection.once("open", () => {
-        // init stream
-        gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-            bucketName: "uploads"
-        });
-    });
-
+const gridFsSetup = (url: string) => {
     // Storage
     const storage = new GridFsStorage({
         url: url,
@@ -37,7 +28,8 @@ const gridFsSetup = (connection: any, url: string) => {
     const upload = multer({
         storage
     });
-    return [gfs, upload];
+
+    return upload;
 };
 
 export default gridFsSetup;
