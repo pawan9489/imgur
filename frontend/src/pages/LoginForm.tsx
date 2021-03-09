@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +10,10 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
+import LoginStatusStore from "../store/loginStatus";
+import { useHistory } from "react-router-dom";
+import Alert from '@material-ui/lab/Alert';
 
 type Inputs = {
     userName: string,
@@ -17,9 +22,27 @@ type Inputs = {
 
 const LoginForm = () => {
     const { register, handleSubmit, errors } = useForm<Inputs>();
+    const [toggleLoggedIn] = LoginStatusStore(state => [state.toggleLoggedIn]);
+    const [apiError, setApiError] = useState(false);
+    const history = useHistory();
+
     const onSubmit = (data: Inputs) => {
-        console.log(data);
+        axios.post('http://localhost:5000/login', {
+            userName: data.userName,
+            password: data.password
+        }, {
+            withCredentials: true
+        }).then(res => {
+            setApiError(false);
+            console.log(res.data);
+            toggleLoggedIn();
+            history.push("/");
+        }).catch(e => {
+            setApiError(true);
+            console.log(e);
+        });
     };
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -41,6 +64,9 @@ const LoginForm = () => {
                         marginTop: '10px',
                     }}
                 >
+                    {
+                        apiError ? <Alert severity="error">Username or Password is not correct</Alert> : null
+                    }
                     <TextField
                         margin="normal"
                         required

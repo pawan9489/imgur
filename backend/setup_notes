@@ -1,4 +1,4 @@
-yarn add bcryptjs cookie-parser cors dotenv express express-session mongoose passport passport-local body-parser
+yarn add bcryptjs cookie-parser cors dotenv express express-session mongoose passport passport-local
 // Dev Deps
 yarn add @types/bcryptjs @types/cookie-parser @types/cors @types/dotenv @types/express @types/express-session @types/mongoose passport @types/passport-local -D
 yarn add nodemon ts-node typescript -D

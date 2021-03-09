@@ -1,5 +1,6 @@
 create-react-app frontend --template typescript
 npm i @material-ui/core
+npm i @material-ui/lab
 npm i react-hook-form
-npm i axios
+npm i axios zustand
 npm i react-router-dom @types/react-router

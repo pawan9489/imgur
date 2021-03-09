@@ -10,7 +10,6 @@ import userRouter from './routes/users';
 import userRegisterRouter from './routes/register';
 import uploadRouter from './routes/uploads';
 import serdeUser from "./services/passportStrategy";
-import bodyParser from 'body-parser';
 
 mongoose.connect("mongodb://mongo:27017/imgur", {
     useCreateIndex: true,
@@ -20,10 +19,9 @@ mongoose.connect("mongodb://mongo:27017/imgur", {
 
 const app = express();
 app.use(express.json());
-// app.use(bodyParser.json()); // support json encoded bodies
-// app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cors({
-    credentials: true
+    origin: 'http://localhost:3000',
+    credentials: true,
 }));
 
 // Session & Cookies
