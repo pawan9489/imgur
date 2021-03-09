@@ -33,8 +33,7 @@ const AppNav = ({ title }: NavProps) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const onLogin = () => {
-    setLoggedIn(!loggedIn);
-    history.push("/");
+    // setLoggedIn(!loggedIn);
   };
 
   const onLogout = () => {
@@ -43,7 +42,7 @@ const AppNav = ({ title }: NavProps) => {
   };
 
   const onRegister = () => {
-    history.push("/login");
+
   };
 
   return (

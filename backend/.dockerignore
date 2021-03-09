@@ -1,0 +1,8 @@
+/node_modules
+/mongodb
+.gitignore
+docker-compose.yaml
+Dockerfile
+setup_notes
+yarn-error.log
+yarn.lock

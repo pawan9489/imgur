@@ -1,0 +1,32 @@
+(express-joi-validation)
+    createValidator(config)
+        query(options)
+        body(options)
+        headers(options)
+        params(options)
+        response(options)
+        fields(options)
+// Use this as a replacement for express.Request
+ValidatedRequest,
+// Extend from this to define a valid schema type/interface
+ValidatedRequestSchema,
+
+// Usage
+const validator = createValidator();
+const bodyJOISchema = Joi.object({...});
+const queryParamsJOISchema = Joi.object({...});
+interface CustomSchema extends ValidatedRequestSchema {
+    [ContainerTypes.Body]: Joi.extractType<typeof bodyJOISchema>
+    [ContainerTypes.Query]: Joi.extractType<typeof queryParamsJOISchema>
+}
+app.get('...path', 
+    validator.headers(headersJOISchema), 
+    validator.query(queryParamsJOISchema), 
+    validator.params(routeParamsJOISchema), 
+    validator.body(bodyJOISchema), 
+    (req: ValidatedRequest<CustomSchema>, res, next) => {
+        req.query....
+        req.body....
+        req.params....
+    }
+)

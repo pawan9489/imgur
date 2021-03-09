@@ -1,0 +1,28 @@
+yarn add bcryptjs cookie-parser cors dotenv express express-session mongoose passport passport-local
+// Dev Deps
+yarn add @types/bcryptjs @types/cookie-parser @types/cors @types/dotenv @types/express @types/express-session @types/mongoose passport @types/passport-local -D
+yarn add nodemon ts-node typescript -D
+npx tsc --init
+
+// Start
+nodemon --exec ts-node src/index.ts
+
+// DB Setup
+docker run -d --name mongoDB -p 27017:27017 -v ~/Desktop/imgur/backend/db:/data/db mongo
+// DB Connect
+mongoose.connect("mongodb://mongo:27017/imgur", {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log(`Connected to Mongo`)).catch((e: Error) => console.error(e.message));
+
+docker-compose up
+docker-compose build
+docker-compose down
+
+A; B    # Run A and then B, regardless of success of A
+A && B  # Run B if and only if A succeeded
+A || B  # Run B if and only if A failed
+A &     # Run A in background.
+
+docker-compose down; docker-compose build; docker-compose up

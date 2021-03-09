@@ -23,7 +23,6 @@ const RegisterForm = () => {
     password.current = watch("password", "");
     const onSubmit = (data: Inputs) => {
         console.log(data);
-        console.log(errors);
     };
     return (
         <Container component="main" maxWidth="xs">
@@ -53,7 +52,6 @@ const RegisterForm = () => {
                         id="userName"
                         label="Username"
                         name="userName"
-                        autoComplete="userName"
                         error={errors.userName !== undefined}
                         helperText={errors.userName && errors.userName.message}
                         autoFocus
@@ -72,7 +70,6 @@ const RegisterForm = () => {
                         id="fullName"
                         label="Full Name"
                         name="fullName"
-                        autoComplete="fullName"
                         error={errors.fullName !== undefined}
                         helperText={errors.fullName && errors.fullName.message}
                         inputRef={register({
@@ -90,7 +87,6 @@ const RegisterForm = () => {
                         id="emailAddress"
                         label="Email Address"
                         name="emailAddress"
-                        autoComplete="emailAddress"
                         error={errors.emailAddress !== undefined}
                         helperText={errors.emailAddress && errors.emailAddress.message}
                         inputRef={register({
@@ -106,7 +102,6 @@ const RegisterForm = () => {
                         id="mobile"
                         label="Mobile Number"
                         name="mobile"
-                        autoComplete="mobile"
                         error={errors.mobile !== undefined}
                         helperText={errors.mobile && errors.mobile.message}
                         inputRef={register({
