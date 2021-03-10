@@ -23,7 +23,7 @@ const Header = (isLoggedIn: boolean, fullName: string) => <>
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 345,
+        maxWidth: 350,
     },
     media: {
         height: 140,
@@ -94,7 +94,7 @@ const Home = () => {
             </Box>
             <Grid container spacing={2} className={classes.grid}>
                 {
-                    images && images.map(image => <Grid key={image._id} item>
+                    images && images.map(image => <Grid key={image._id} item xs>
                         <Card className={classes.root}>
                             <CardActionArea>
                                 <CardMedia

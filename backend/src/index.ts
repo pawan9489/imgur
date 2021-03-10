@@ -9,6 +9,8 @@ import passportLocal from 'passport-local';
 import userRouter from './routes/users';
 import userRegisterRouter from './routes/register';
 import uploadRouter from './routes/uploads';
+import imageRouter from './routes/image';
+import commentRouter from './routes/comments';
 import serdeUser from "./services/passportStrategy";
 import gridFsSetup from "./services/gridFsSetup";
 import Grid from 'gridfs-stream';
@@ -66,6 +68,8 @@ app.get("/logout", (req, res) => {
 // Routes
 app.use('/users', userRouter);
 app.use('/register', userRegisterRouter);
+app.use('/image', imageRouter);
+app.use('/comment', commentRouter);
 connection.then(() => {
     // init stream
     const gfs = Grid(mongoose.connection.db, mongoose.mongo);
