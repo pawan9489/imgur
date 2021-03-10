@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { persist } from "zustand/middleware";
 import axios from 'axios';
 
 type State = {
@@ -8,7 +9,7 @@ type State = {
     toggleLoggedIn: () => void
 }
 
-const LoginStatusStore = create<State>((set, get) => ({
+const LoginStatusStore = create<State>(persist((set, get) => ({
     isLoggedIn: false,
     userName: '',
     fullName: '',
@@ -25,6 +26,9 @@ const LoginStatusStore = create<State>((set, get) => ({
         }
         set(state => ({ isLoggedIn: !state.isLoggedIn }));
     },
+}), {
+    name: "user-data",
+    getStorage: () => sessionStorage
 }));
 
 export default LoginStatusStore;

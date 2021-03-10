@@ -38,6 +38,9 @@ app.use(session({
     secret: 'secretcode',
     resave: true,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 20000
+    }
 }));
 app.use(cookieParser());
 // Passport for Serde
@@ -66,7 +69,7 @@ app.use('/register', userRegisterRouter);
 connection.then(() => {
     // init stream
     const gfs = Grid(mongoose.connection.db, mongoose.mongo);
-    gfs.collection('imageUpload');
+    gfs.collection('uploads');
     app.use('/upload', uploadRouter(gfs, upload!));
 });
 

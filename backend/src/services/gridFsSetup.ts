@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import multer from 'multer';
 import crypto from 'crypto';
 import path from 'path';

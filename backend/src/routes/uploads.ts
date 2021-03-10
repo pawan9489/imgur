@@ -9,7 +9,22 @@ const uploadsRouter = (gfs: Grid, upload: multer.Multer) => {
         res.json({ file: req.file })
     });
 
+    router.get('/files', (req: Request, res: Response) => {
+        console.log('From /files', gfs.collection.name);
+        gfs.files.find().toArray((err: Error, files) => {
+            //check if files exist
+            if (!files || files.length == 0) {
+                return res.status(404).json({
+                    err: "No files exist"
+                })
+            }
+            // files exist
+            return res.json(files)
+        })
+    });
+
     router.get("/:filename", (req: Request, res: Response) => {
+        console.log('From Filename', gfs.collection.name);
         gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             //check if files exist
             if (!file || file.length == 0) {
@@ -30,21 +45,8 @@ const uploadsRouter = (gfs: Grid, upload: multer.Multer) => {
         })
     });
 
-    router.get('/files', (req: Request, res: Response) => {
-        gfs.files.find().toArray((err: Error, files) => {
-            //check if files exist
-            if (!files || files.length == 0) {
-                return res.status(404).json({
-                    err: "No files exist"
-                })
-            }
-            // files exist
-            return res.json(files)
-        })
-    })
-
     router.delete("/:id", (req: Request, res: Response) => {
-        gfs.remove({ _id: req.params.id, root: 'imageUpload' }, (err: Error) => {
+        gfs.remove({ _id: req.params.id, root: 'uploads' }, (err: Error) => {
             if (err) {
                 return res.status(404).json({ err: err })
             }
