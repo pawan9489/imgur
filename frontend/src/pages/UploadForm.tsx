@@ -47,11 +47,11 @@ type Inputs = {
 };
 
 export default function UploadForm({open, handleClose}: Props) {
-    const { register, handleSubmit, control, errors, reset, getValues } = useForm<Inputs>();
+    const { register, handleSubmit, control, errors, reset, getValues, setValue } = useForm<Inputs>();
     const [userName] = LoginStatusStore(state => [state.userName]);
     const [file, setFile] = useState<File | null>(null);
     const [fileURL, setFileURL] = useState<any>('');
-    const [error, setError] = useState<string | null>('');
+    const [errorMessage, setErrorMessage] = useState<string | null>('');
     const classes = useStyles();
 
     const changeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,29 +59,44 @@ export default function UploadForm({open, handleClose}: Props) {
         const selected = files ? files[0] : null;
         if (selected && acceptableImageFormats.includes(selected.type)) {
             setFile(selected);
-            setError(null);
+            setErrorMessage(null);
             console.log(selected);
             const reader = new FileReader();
             reader.onload = e => setFileURL(e!.target!.result);
             reader.readAsDataURL(selected);
         } else {
+            document.querySelector('#file')!.nodeValue = null;
             setFile(null);
-            setError(`Please provive file types (${acceptableImageFormats.join(', ')})`);
+            setErrorMessage(`Please provive file types (${acceptableImageFormats.join(', ')})`);
         }
     };
 
     const submitForm = async () => {
+        if (!file) {
+            setErrorMessage(`You must upload an image`);
+            setValue('file', null);
+            return;
+        }
         const formValue = getValues();
+        if (!formValue.tags.length) {
+            setErrorMessage(`You must attach 1 tag to the image`);
+            return;
+        }
         const formData = new FormData();
         formData.append("file", file!);
         formData.append("userName", userName);
         formData.append("description", formValue.description);
         formData.append("tags", formValue.tags.join(','));
-        // console.log(getValues(), formData);
         await axios.post('http://localhost:5000/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
+        })
+        .then(() => {
+            onClose();
+        })
+        .catch(e => {
+            setErrorMessage(e);
         });
     };
 
@@ -89,7 +104,7 @@ export default function UploadForm({open, handleClose}: Props) {
         handleClose();
         setFile(null);
         setFileURL(null);
-        setError(null);
+        setErrorMessage(null);
         reset();
     };
 
@@ -104,11 +119,16 @@ export default function UploadForm({open, handleClose}: Props) {
                 fullWidth={true}
             >
                 <DialogTitle id="alert-dialog-title">Upload Image</DialogTitle>
+                {
+                    errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null
+                }
                 <DialogContent style={{width: '100%'}}>
                     <DialogContentText id="alert-dialog-description">
                         <Grid container className={classes.root} spacing={2} direction="row">
                             <Grid item xs={6}>
-                                <input type="file" ref={register} onChange={changeHandler} />
+                                <input type="file" id="file" ref={register({
+                                    required: "You must upload an image",
+                                })} onChange={changeHandler} />
                                 {
                                     file ? 
                                     <>
