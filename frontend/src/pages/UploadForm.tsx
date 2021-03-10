@@ -125,7 +125,7 @@ export default function UploadForm({open, handleClose}: Props) {
                 <DialogContent style={{width: '100%'}}>
                     <DialogContentText id="alert-dialog-description">
                         <Grid container className={classes.root} spacing={2} direction="row">
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <input type="file" id="file" ref={register({
                                     required: "You must upload an image",
                                 })} onChange={changeHandler} />
@@ -139,7 +139,7 @@ export default function UploadForm({open, handleClose}: Props) {
                                     : null
                                 }
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <TextField
                                     margin="normal"
                                     required

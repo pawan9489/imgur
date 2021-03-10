@@ -12,12 +12,13 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import LoginStatusStore from "../store/loginStatus";
 import UploadForm from "./UploadForm";
+import CommentForm from "./CommentForm";
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 
 const Header = (isLoggedIn: boolean, fullName: string) => <>
     {
-        isLoggedIn ? <p>Hi {fullName} Welcome to Imgur</p> : <p>Welcome to Imgur, Please login to view and comment on posts</p>
+        isLoggedIn ? <p style={{textAlign: 'center'}}>Hi {fullName} Welcome to Imgur</p> : <p>Welcome to Imgur, Please login to view and comment on posts</p>
     }
 </>;
 
@@ -48,6 +49,8 @@ const Home = () => {
     const [isLoggedIn, fullName] = LoginStatusStore(state => [state.isLoggedIn, state.fullName]);
     const [open, setOpen] = useState(false);
     const [images, setImages] = useState<[Image]>();
+    const [openCommentSecion, setOpenCommentSecion] = useState(false);
+    const [selectedFileName, setSelectedFileName] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -55,6 +58,15 @@ const Home = () => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const openComments = filename => {
+        setOpenCommentSecion(true);
+        setSelectedFileName(filename);
+    };
+
+    const handleCommentSectionClose = () => {
+        setOpenCommentSecion(false);
     };
 
     useEffect(() => {
@@ -86,7 +98,7 @@ const Home = () => {
                         <>
                             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                                 Upload Image
-                    </Button>
+                            </Button>
                             <UploadForm open={open} handleClose={handleClose} />
                         </>
                         : null
@@ -94,7 +106,7 @@ const Home = () => {
             </Box>
             <Grid container spacing={2} className={classes.grid}>
                 {
-                    images && images.map(image => <Grid key={image._id} item xs>
+                    images && images.map(image => <Grid key={image._id} item xs={6} lg={2} md={3}>
                         <Card className={classes.root}>
                             <CardActionArea>
                                 <CardMedia
@@ -103,12 +115,12 @@ const Home = () => {
                                 />
                                 <CardContent>
                                     <Typography variant="body2" color="textSecondary" component="p">
-                                        Random Description
+                                        Title
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
-                                <Button size="small" color="primary">
+                                <Button size="small" color="primary" onClick={() => openComments(image.filename)}>
                                     Comment
                                 </Button>
                             </CardActions>
@@ -116,6 +128,7 @@ const Home = () => {
                     </Grid>)
                 }
             </Grid>
+            <CommentForm open={openCommentSecion} handleClose={handleCommentSectionClose} filename={selectedFileName}/>
         </Container>
     );
 };

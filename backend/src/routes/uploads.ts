@@ -30,6 +30,7 @@ const uploadsRouter = (gfs: Grid, upload: multer.Multer) => {
                 });
             }
             // files exist
+            // Image.find({fileName: {$in: files.map(file => file.filename)}});
             return res.json(files)
         });
     });

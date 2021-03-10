@@ -45,7 +45,7 @@ const RegisterForm = () => {
             }, 2000);
         }).catch(e => {
             setApiSuccess(false);
-            setApiErrorMessage(e);
+            setApiErrorMessage(JSON.stringify(e));
             setApiError(true);
         });
     };
