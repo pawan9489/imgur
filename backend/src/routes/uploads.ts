@@ -6,7 +6,8 @@ const uploadsRouter = (gfs: Grid, upload: multer.Multer) => {
     const router = express.Router();
 
     router.post("/", upload.single("file"), (req: Request, res: Response) => {
-        res.json({ file: req.file })
+        console.log(req.body, req.file);
+        res.json({ file: req.file });
     });
 
     router.get('/files', (req: Request, res: Response) => {

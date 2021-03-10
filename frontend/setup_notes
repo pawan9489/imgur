@@ -4,3 +4,4 @@ npm i @material-ui/lab
 npm i react-hook-form
 npm i axios zustand
 npm i react-router-dom @types/react-router
+npm i material-ui-chip-input@next
